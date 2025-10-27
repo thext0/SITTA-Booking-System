@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SITTA - Sistem Pemesanan Bahan Ajar UT</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="landing-page">
+        <!-- Navigation -->
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1>📚 SITTA</h1>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero">
+            <div class="container">
+                <h2>Sistem Pemesanan Bahan Ajar</h2>
+                <p>Universitas Terbuka</p>
+                <p class="subtitle">Pesan bahan ajar dengan mudah, cepat, dan terpercaya</p>
+                <div class="hero-buttons">
+                    <button class="btn btn-primary" onclick="goToLogin()">Masuk</button>
+                    <button class="btn btn-secondary" onclick="goToRegister()">Daftar</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <h3>Fitur Utama</h3>
+                <div class="features-grid">
+                    <article class="feature-card fade-in">
+                        <div class="feature-icon">🛒</div>
+                        <h4>Katalog Lengkap</h4>
+                        <p>Ribuan bahan ajar dari berbagai fakultas tersedia</p>
+                    </article>
+                    <article class="feature-card fade-in">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Mudah Digunakan</h4>
+                        <p>Interface yang intuitif dan responsif</p>
+                    </article>
+                    <article class="feature-card fade-in">
+                        <div class="feature-icon">📍</div>
+                        <h4>Pilihan Distribusi</h4>
+                        <p>Ambil di tempat atau dikirim ke alamat Anda</p>
+                    </article>
+                    <article class="feature-card fade-in">
+                        <div class="feature-icon">📊</div>
+                        <h4>Tracking Realtime</h4>
+                        <p>Pantau status pesanan Anda kapan saja</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2025 SITTA - Universitas Terbuka. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+
+        function goToRegister() {
+            window.location.href = 'register.html';
+        }
+
+        // Initialize app on load
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeSampleData();
+            
+            // Check if user already logged in
+            const currentUser = getCurrentUser();
+            if (currentUser) {
+                if (currentUser.role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else {
+                    window.location.href = 'catalog.html';
+                }
+            }
+        });
+    </script>
+</body>
+</html>

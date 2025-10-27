@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Pesanan - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h2>📚 SITTA</h2>
+                <p>Admin Panel</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-products.html" class="menu-item">
+                    <span class="icon">📚</span>
+                    <span>Kelola Bahan Ajar</span>
+                </a>
+                <a href="admin-orders.html" class="menu-item active">
+                    <span class="icon">📦</span>
+                    <span>Kelola Pesanan</span>
+                </a>
+                <a href="#" onclick="logout()" class="menu-item logout">
+                    <span class="icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header class="admin-header">
+                <h1>Kelola Pesanan</h1>
+            </header>
+
+            <div class="container">
+                <section class="orders-management fade-in">
+                    <div class="filter-bar">
+                        <select id="status-filter" onchange="filterOrdersByStatus(this.value)">
+                            <option value="">Semua Status</option>
+                            <option value="Menunggu Konfirmasi">Menunggu Konfirmasi</option>
+                            <option value="Sedang Diproses">Sedang Diproses</option>
+                            <option value="Siap Diambil">Siap Diambil</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                    </div>
+
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Pemesan</th>
+                                <th>Tanggal Pesan</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="orders-list">
+                            <!-- Orders will be rendered here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div id="order-detail-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeOrderDetailModal()">✕</button>
+            <div id="order-detail-content"></div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-orders.js"></script>
+</body>
+</html>

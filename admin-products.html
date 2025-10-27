@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kelola Bahan Ajar - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h2>📚 SITTA</h2>
+                <p>Admin Panel</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-products.html" class="menu-item active">
+                    <span class="icon">📚</span>
+                    <span>Kelola Bahan Ajar</span>
+                </a>
+                <a href="admin-orders.html" class="menu-item">
+                    <span class="icon">📦</span>
+                    <span>Kelola Pesanan</span>
+                </a>
+                <a href="#" onclick="logout()" class="menu-item logout">
+                    <span class="icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header class="admin-header">
+                <h1>Kelola Bahan Ajar</h1>
+                <button onclick="openAddProductModal()" class="btn btn-primary">+ Tambah Bahan Ajar</button>
+            </header>
+
+            <div class="container">
+                <section class="products-management fade-in">
+                    <div class="search-filter-bar">
+                        <input type="text" id="product-search" placeholder="Cari bahan ajar..." class="search-input">
+                    </div>
+
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama</th>
+                                <th>Fakultas</th>
+                                <th>Harga</th>
+                                <th>Stok</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="products-list">
+                            <!-- Products will be rendered here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="product-form-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeProductModal()">✕</button>
+            <h3 id="modal-title">Tambah Bahan Ajar</h3>
+            <form id="product-form" onsubmit="handleProductSubmit(event)">
+                <input type="hidden" id="product-id">
+
+                <div class="form-group">
+                    <label for="product-code">Kode Mata Kuliah</label>
+                    <input type="text" id="product-code" placeholder="Misal: PAUD4301" required>
+                    <span class="error-message" id="error-product-code"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-name">Nama Bahan Ajar</label>
+                    <input type="text" id="product-name" placeholder="Masukkan nama bahan ajar" required>
+                    <span class="error-message" id="error-product-name"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-faculty">Fakultas</label>
+                    <select id="product-faculty" required>
+                        <option value="">-- Pilih Fakultas --</option>
+                        <option value="FKIP">FKIP</option>
+                        <option value="FE">FE</option>
+                        <option value="FHISIP">FHISIP</option>
+                        <option value="FST">FST</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-price">Harga</label>
+                    <input type="number" id="product-price" placeholder="Masukkan harga" min="0" required>
+                    <span class="error-message" id="error-product-price"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-stock">Stok</label>
+                    <input type="number" id="product-stock" placeholder="Masukkan stok" min="0" required>
+                    <span class="error-message" id="error-product-stock"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="product-description">Deskripsi</label>
+                    <textarea id="product-description" placeholder="Masukkan deskripsi" rows="4"></textarea>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" onclick="closeProductModal()" class="btn btn-secondary">Batal</button>
+                    <button type="submit" class="btn btn-primary">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <!-- Confirm Delete Modal -->
+    <div id="confirm-delete-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <h3>Konfirmasi Hapus</h3>
+            <p>Yakin ingin menghapus bahan ajar ini?</p>
+            <div class="form-actions">
+                <button onclick="closeConfirmModal()" class="btn btn-secondary">Batal</button>
+                <button onclick="confirmDelete()" class="btn btn-danger">Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-products.js"></script>
+</body>
+</html>

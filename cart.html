@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keranjang - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <nav class="navbar navbar-dark">
+            <div class="container nav-flex">
+                <div class="nav-brand">
+                    <h1>📚 SITTA</h1>
+                </div>
+                <div id="navbar-menu"></div>
+            </div>
+        </nav>
+
+        <main class="container">
+            <section class="cart-section fade-in">
+                <h2>Keranjang Belanja</h2>
+
+                <div id="cart-empty" class="empty-state">
+                    <p>📭 Keranjang Anda kosong</p>
+                    <a href="catalog.html" class="btn btn-primary">Lanjut Belanja</a>
+                </div>
+
+                <div id="cart-content" class="cart-content" style="display: none;">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Bahan Ajar</th>
+                                <th>Harga</th>
+                                <th>Qty</th>
+                                <th>Subtotal</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cart-items">
+                            <!-- Cart items will be rendered here -->
+                        </tbody>
+                    </table>
+
+                    <div class="cart-summary">
+                        <div class="summary-row">
+                            <span>Total Harga:</span>
+                            <span id="total-price" class="total-price">Rp 0</span>
+                        </div>
+                    </div>
+
+                    <div class="cart-actions">
+                        <a href="catalog.html" class="btn btn-secondary">← Lanjut Belanja</a>
+                        <button onclick="goToCheckout()" class="btn btn-primary">Lanjut ke Checkout →</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SITTA - Universitas Terbuka</p>
+        </footer>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>

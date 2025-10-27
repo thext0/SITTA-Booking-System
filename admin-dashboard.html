@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <h2>📚 SITTA</h2>
+                <p>Admin Panel</p>
+            </div>
+
+            <nav class="sidebar-menu">
+                <a href="admin-dashboard.html" class="menu-item active">
+                    <span class="icon">📊</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="admin-products.html" class="menu-item">
+                    <span class="icon">📚</span>
+                    <span>Kelola Bahan Ajar</span>
+                </a>
+                <a href="admin-orders.html" class="menu-item">
+                    <span class="icon">📦</span>
+                    <span>Kelola Pesanan</span>
+                </a>
+                <a href="#" onclick="logout()" class="menu-item logout">
+                    <span class="icon">🚪</span>
+                    <span>Logout</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main class="admin-content">
+            <header class="admin-header">
+                <h1>Dashboard</h1>
+                <div class="admin-profile">
+                    <span id="admin-name"></span>
+                </div>
+            </header>
+
+            <div class="container">
+                <section class="dashboard-overview fade-in">
+                    <div class="stats-grid">
+                        <article class="stat-card">
+                            <div class="stat-icon orders">📦</div>
+                            <div class="stat-info">
+                                <p class="stat-label">Total Pesanan</p>
+                                <p class="stat-value" id="total-orders">0</p>
+                            </div>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-icon pending">⏳</div>
+                            <div class="stat-info">
+                                <p class="stat-label">Menunggu Konfirmasi</p>
+                                <p class="stat-value" id="pending-orders">0</p>
+                            </div>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-icon processing">⚙️</div>
+                            <div class="stat-info">
+                                <p class="stat-label">Sedang Diproses</p>
+                                <p class="stat-value" id="processing-orders">0</p>
+                            </div>
+                        </article>
+
+                        <article class="stat-card">
+                            <div class="stat-icon products">📚</div>
+                            <div class="stat-info">
+                                <p class="stat-label">Total Bahan Ajar</p>
+                                <p class="stat-value" id="total-products">0</p>
+                            </div>
+                        </article>
+                    </div>
+                </section>
+
+                <section class="recent-orders">
+                    <h3>Pesanan Terbaru</h3>
+                    <table class="orders-table">
+                        <thead>
+                            <tr>
+                                <th>ID Pesanan</th>
+                                <th>Pemesan</th>
+                                <th>Tanggal</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-orders-list">
+                            <!-- Recent orders will be rendered here -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/admin-dashboard.js"></script>
+</body>
+</html>

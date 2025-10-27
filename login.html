@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <nav class="navbar">
+            <div class="container">
+                <div class="nav-brand">
+                    <h1>📚 SITTA</h1>
+                </div>
+                <a href="index.html" class="btn-back">← Kembali</a>
+            </div>
+        </nav>
+
+        <main class="auth-form-container">
+            <div class="auth-box fade-in">
+                <h2>Masuk ke SITTA</h2>
+                <p class="auth-subtitle">Login dengan akun Anda</p>
+
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label for="email">Email atau NIM</label>
+                        <input 
+                            type="text" 
+                            id="email" 
+                            name="email" 
+                            placeholder="Masukkan email atau NIM"
+                            required
+                        >
+                        <span class="error-message" id="error-email"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password" 
+                            placeholder="Masukkan password"
+                            required
+                        >
+                        <span class="error-message" id="error-password"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox">
+                            <input type="checkbox" id="remember-me">
+                            <span>Ingat saya</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+                </form>
+
+                <div class="auth-footer">
+                    <p>Belum punya akun? <a href="register.html">Daftar di sini</a></p>
+                </div>
+
+                <div class="demo-credentials">
+                    <h4>Demo Account:</h4>
+                    <p><strong>Admin:</strong> admin@ut.ac.id / admin123</p>
+                    <p><strong>User:</strong> andi@mahasiswa.ut.ac.id / user123</p>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SITTA - Universitas Terbuka</p>
+        </footer>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+</body>
+</html>

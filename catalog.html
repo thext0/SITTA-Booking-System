@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Katalog - SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/product-card.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation -->
+        <nav class="navbar navbar-dark">
+            <div class="container nav-flex">
+                <div class="nav-brand">
+                    <h1>📚 SITTA</h1>
+                </div>
+                <div id="navbar-menu"></div>
+            </div>
+        </nav>
+
+        <main class="container">
+            <section class="catalog-section fade-in">
+                <h2>Katalog Bahan Ajar</h2>
+
+                <!-- Search & Filter Bar -->
+                <div class="search-filter-bar">
+                    <div class="search-box">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            placeholder="Cari bahan ajar (nama, kode, dosen)..."
+                            class="search-input"
+                        >
+                        <span class="search-icon">🔍</span>
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="faculty-filter">Fakultas:</label>
+                            <select id="faculty-filter">
+                                <option value="">Semua</option>
+                                <option value="FKIP">FKIP</option>
+                                <option value="FE">FE</option>
+                                <option value="FHISIP">FHISIP</option>
+                                <option value="FST">FST</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="sort-filter">Urutkan:</label>
+                            <select id="sort-filter">
+                                <option value="default">Default</option>
+                                <option value="price-low">Harga Terendah</option>
+                                <option value="price-high">Harga Tertinggi</option>
+                                <option value="name">Nama A-Z</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Products Grid -->
+                <div id="product-grid" class="product-grid">
+                    <!-- Products will be rendered here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2025 SITTA - Universitas Terbuka</p>
+        </footer>
+    </div>
+
+    <!-- Product Detail Modal -->
+    <div id="product-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content product-modal-content">
+            <button class="modal-close" onclick="closeProductModal()">✕</button>
+            <div id="product-detail"></div>
+        </div>
+    </div>
+
+    <!-- Notification Modal -->
+    <div id="notification-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="message"></div>
+        </div>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/catalog.js"></script>
+</body>
+</html>
