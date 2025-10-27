@@ -64,6 +64,24 @@ function initializeSampleData() {
 }
 
 // ============================================
+// Update Cart Badge
+// ============================================
+
+function updateCartBadge() {
+    const badge = document.getElementById('cart-count');
+    if (badge) {
+        const cart = getCart();
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        badge.textContent = totalItems;
+        
+        if (totalItems > 0) {
+            badge.classList.add('pulse');
+            setTimeout(() => badge.classList.remove('pulse'), 400);
+        }
+    }
+}
+
+// ============================================
 // Notification System
 // ============================================
 

@@ -66,12 +66,14 @@ function updateQuantity(productId, quantity) {
     } else {
         updateCartItem(productId, qty);
         renderCartItems();
+        updateCartBadge();
     }
 }
 
 function removeItem(productId) {
     removeFromCart(productId);
     initializeCart();
+    updateCartBadge();
     showNotification('Item dihapus dari keranjang', 'success');
 }
 
