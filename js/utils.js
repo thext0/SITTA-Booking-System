@@ -306,7 +306,9 @@ function createOrder(orderData) {
         id: newId,
         ...orderData,
         createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
+        updatedAt: new Date().toISOString(),
+        // flag to indicate whether stock for this order has been adjusted
+        stockAdjusted: false
     };
 
     orders.push(newOrder);
@@ -321,11 +323,41 @@ function updateOrderStatus(orderId, newStatus) {
     if (order) {
         order.status = newStatus;
         order.updatedAt = new Date().toISOString();
+
+        // Jika status berubah menjadi 'Sedang Diproses', kurangi stok sesuai item pesanan
+        // namun hanya lakukan sekali per order (hindari pengurangan ganda)
+        // (stok dikurangi saat pesanan mulai diproses)
+        if (newStatus === 'Sedang Diproses' && !order.stockAdjusted) {
+            reduceStockForOrder(order);
+            order.stockAdjusted = true;
+        }
+
         localStorage.setItem('sitta_orders', JSON.stringify(orders));
         return order;
     }
 
     return null;
+}
+
+/**
+ * Kurangi stok produk berdasarkan item pada order.
+ * Melakukan update pada daftar produk yang tersimpan di localStorage.
+ */
+function reduceStockForOrder(order) {
+    if (!order || !order.items || !Array.isArray(order.items)) return;
+
+    const products = getProducts();
+
+    order.items.forEach(item => {
+        const prod = products.find(p => p.id === item.productId);
+        if (prod) {
+            const newStock = Math.max(0, (prod.stock || 0) - (item.quantity || 0));
+            // update local copy
+            prod.stock = newStock;
+            // persist via updateProduct helper
+            updateProduct(prod.id, { stock: newStock });
+        }
+    });
 }
 
 function getOrdersByStatus(status) {
