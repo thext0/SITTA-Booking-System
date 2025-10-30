@@ -321,15 +321,34 @@ function updateOrderStatus(orderId, newStatus) {
     const order = orders.find(o => o.id === orderId);
 
     if (order) {
+        // Jika order sudah berstatus 'Selesai', jangan izinkan perubahan status lagi
+        if (order.status === 'Selesai') {
+            // beri tahu pengguna/admin bahwa status final tidak bisa diubah
+            if (typeof showNotification === 'function') {
+                showNotification('Status pesanan sudah "Selesai" dan tidak dapat diubah.', 'error');
+            }
+            return order;
+        }
+
+        const prevStatus = order.status;
+
+        // Update status & timestamp
         order.status = newStatus;
         order.updatedAt = new Date().toISOString();
 
         // Jika status berubah menjadi 'Sedang Diproses', kurangi stok sesuai item pesanan
         // namun hanya lakukan sekali per order (hindari pengurangan ganda)
-        // (stok dikurangi saat pesanan mulai diproses)
         if (newStatus === 'Sedang Diproses' && !order.stockAdjusted) {
             reduceStockForOrder(order);
             order.stockAdjusted = true;
+        }
+
+        // Jika sebelumnya sudah berada di 'Sedang Diproses' tapi sekarang dikembalikan ke status lain,
+        // maka lakukan rollback (kembalikan stok) hanya jika stok sebelumnya sudah disesuaikan.
+        // Ini mencegah kehilangan stok ketika admin mengubah status bolak-balik.
+        if (prevStatus === 'Sedang Diproses' && newStatus !== 'Sedang Diproses' && order.stockAdjusted) {
+            restoreStockForOrder(order);
+            order.stockAdjusted = false;
         }
 
         localStorage.setItem('sitta_orders', JSON.stringify(orders));
@@ -352,6 +371,27 @@ function reduceStockForOrder(order) {
         const prod = products.find(p => p.id === item.productId);
         if (prod) {
             const newStock = Math.max(0, (prod.stock || 0) - (item.quantity || 0));
+            // update local copy
+            prod.stock = newStock;
+            // persist via updateProduct helper
+            updateProduct(prod.id, { stock: newStock });
+        }
+    });
+}
+
+/**
+ * Kembalikan stok produk berdasarkan item pada order.
+ * Digunakan untuk rollback apabila order dikembalikan dari status 'Sedang Diproses'.
+ */
+function restoreStockForOrder(order) {
+    if (!order || !order.items || !Array.isArray(order.items)) return;
+
+    const products = getProducts();
+
+    order.items.forEach(item => {
+        const prod = products.find(p => p.id === item.productId);
+        if (prod) {
+            const newStock = (prod.stock || 0) + (item.quantity || 0);
             // update local copy
             prod.stock = newStock;
             // persist via updateProduct helper

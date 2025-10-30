@@ -24,7 +24,7 @@ function renderOrdersList(orders) {
     }
 
     tbody.innerHTML = orders.map(order => `
-        <tr>
+        <tr class="${order.status === 'Selesai' ? 'order-completed' : ''}">
             <td>#${order.id}</td>
             <td>${order.userName}</td>
             <td>${formatDate(order.createdAt)}</td>
@@ -33,13 +33,17 @@ function renderOrdersList(orders) {
             <td>
                 <div class="action-buttons">
                     <button onclick="viewOrderDetail(${order.id})" class="btn btn-primary">Detail</button>
-                    <select onchange="updateStatus(${order.id}, this.value)" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #e5e7eb;">
-                        <option value="">Ubah Status</option>
-                        <option value="Menunggu Konfirmasi">Menunggu</option>
-                        <option value="Sedang Diproses">Diproses</option>
-                        <option value="Siap Diambil">Siap</option>
-                        <option value="Selesai">Selesai</option>
-                    </select>
+                    ${order.status === 'Selesai' ? `
+                        <span class="final-status">Selesai</span>
+                    ` : `
+                        <select onchange="updateStatus(${order.id}, this.value)" style="padding: 0.5rem; border-radius: 6px; border: 1px solid #e5e7eb;">
+                            <option value="">Ubah Status</option>
+                            <option value="Menunggu Konfirmasi">Menunggu</option>
+                            <option value="Sedang Diproses">Diproses</option>
+                            <option value="Siap Diambil">Siap</option>
+                            <option value="Selesai">Selesai</option>
+                        </select>
+                    `}
                 </div>
             </td>
         </tr>
@@ -125,17 +129,23 @@ function viewOrderDetail(orderId) {
             </div>
         </div>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-            <button onclick="updateStatusFromModal('Sedang Diproses')" class="btn btn-primary" style="width: 100%;">
-                Proses
-            </button>
-            <button onclick="updateStatusFromModal('Siap Diambil')" class="btn btn-primary" style="width: 100%;">
-                Siap
-            </button>
-            <button onclick="updateStatusFromModal('Selesai')" class="btn btn-primary" style="width: 100%;">
-                Selesai
-            </button>
-        </div>
+        ${order.status === 'Selesai' ? `
+            <div style="margin-bottom: 1rem;">
+                <button class="btn btn-secondary" style="width:100%;" disabled>Pesanan sudah selesai — status tidak dapat diubah</button>
+            </div>
+        ` : `
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+                <button onclick="updateStatusFromModal('Sedang Diproses')" class="btn btn-primary" style="width: 100%;">
+                    Proses
+                </button>
+                <button onclick="updateStatusFromModal('Siap Diambil')" class="btn btn-primary" style="width: 100%;">
+                    Siap
+                </button>
+                <button onclick="updateStatusFromModal('Selesai')" class="btn btn-primary" style="width: 100%;">
+                    Selesai
+                </button>
+            </div>
+        `}
 
         <button onclick="closeOrderDetailModal()" class="btn btn-secondary" style="width: 100%;">
             Tutup
@@ -148,6 +158,12 @@ function viewOrderDetail(orderId) {
 function updateStatus(orderId, newStatus) {
     if (!newStatus) return;
 
+    const order = getOrderById(orderId);
+    if (order && order.status === 'Selesai') {
+        showNotification('Status pesanan sudah "Selesai" dan tidak dapat diubah.', 'error');
+        return;
+    }
+
     updateOrderStatus(orderId, newStatus);
     showNotification(`Status pesanan berhasil diubah menjadi: ${newStatus}`, 'success');
     initializeOrdersManagement();
@@ -155,6 +171,12 @@ function updateStatus(orderId, newStatus) {
 
 function updateStatusFromModal(newStatus) {
     if (selectedOrderId) {
+        const order = getOrderById(selectedOrderId);
+        if (order && order.status === 'Selesai') {
+            showNotification('Status pesanan sudah "Selesai" dan tidak dapat diubah.', 'error');
+            return;
+        }
+
         updateOrderStatus(selectedOrderId, newStatus);
         showNotification(`Status pesanan berhasil diubah menjadi: ${newStatus}`, 'success');
         closeOrderDetailModal();

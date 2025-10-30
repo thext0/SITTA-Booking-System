@@ -400,6 +400,15 @@
     color: #065f46;
 }
 
+/* Highlight completed orders in the table for easier scanning */
+.orders-table tbody tr.order-completed {
+    background-color: #ecfdf5; /* very light green */
+}
+
+.orders-table tbody tr.order-completed td {
+    border-left: 4px solid #065f46; /* green accent */
+}
+
 /* ============================================
    Responsive Design for Admin
    ============================================ */

@@ -49,17 +49,17 @@
                             </fieldset>
 
                             <!-- Delivery Address -->
-                            <fieldset class="form-section">
+                            <fieldset class="form-section" id="fieldset-delivery-address">
                                 <legend>Alamat Pengiriman</legend>
                                 <div class="form-group">
                                     <label for="delivery-address">Alamat</label>
-                                    <textarea id="delivery-address" placeholder="Masukkan alamat lengkap" rows="3" required></textarea>
+                                    <textarea id="delivery-address" placeholder="Masukkan alamat lengkap" rows="3"></textarea>
                                     <span class="error-message" id="error-delivery-address"></span>
                                 </div>
                             </fieldset>
 
                             <!-- Payment Method -->
-                            <fieldset class="form-section">
+                            <fieldset class="form-section" id="fieldset-payment-method">
                                 <legend>Metode Pembayaran</legend>
                                 <div class="form-group">
                                     <label class="radio">
@@ -67,6 +67,24 @@
                                         <span class="radio-label">
                                             <strong>Bayar di Tempat (COD)</strong>
                                             <small>Pembayaran saat mengambil atau menerima barang</small>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="radio">
+                                        <input type="radio" name="payment" value="transfer">
+                                        <span class="radio-label">
+                                            <strong>Transfer Bank</strong>
+                                            <small>Transfer ke rekening kami, konfirmasi via email</small>
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label class="radio">
+                                        <input type="radio" name="payment" value="ewallet">
+                                        <span class="radio-label">
+                                            <strong>Dompet Digital</strong>
+                                            <small>OVO / GoPay / Dana</small>
                                         </span>
                                     </label>
                                 </div>

@@ -26,10 +26,32 @@ function initializeCheckout(user) {
 
     // Handle delivery method change
     document.querySelectorAll('input[name="delivery"]').forEach(radio => {
-        radio.addEventListener('change', updateShippingCost);
+        radio.addEventListener('change', () => {
+            updateShippingCost();
+            toggleDeliveryFields();
+        });
     });
 
+    // Initialize visibility based on selected option
     updateShippingCost();
+    toggleDeliveryFields();
+}
+
+function toggleDeliveryFields() {
+    const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
+    const addressFieldset = document.getElementById('fieldset-delivery-address');
+    const addressInput = document.getElementById('delivery-address');
+
+    if (addressFieldset) {
+        if (deliveryMethod === 'pickup') {
+            // hide address when pickup selected
+            addressFieldset.style.display = 'none';
+            if (addressInput) addressInput.required = false;
+        } else {
+            addressFieldset.style.display = 'block';
+            if (addressInput) addressInput.required = true;
+        }
+    }
 }
 
 function renderOrderSummary() {
@@ -82,14 +104,16 @@ function handleCheckout(event) {
 
     clearErrors();
 
-    const deliveryAddress = document.getElementById('delivery-address').value.trim();
     const deliveryMethod = document.querySelector('input[name="delivery"]:checked').value;
-    const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+    const deliveryAddressEl = document.getElementById('delivery-address');
+    const deliveryAddress = deliveryMethod === 'delivery' && deliveryAddressEl ? deliveryAddressEl.value.trim() : '';
+    const paymentMethod = document.querySelector('input[name="payment"]:checked') ? document.querySelector('input[name="payment"]:checked').value : '';
     const notes = document.getElementById('order-notes').value.trim();
 
     let isValid = true;
 
-    if (!deliveryAddress) {
+    // Validate address only when delivery selected
+    if (deliveryMethod === 'delivery' && !deliveryAddress) {
         showError('delivery-address', 'Alamat pengiriman harus diisi');
         isValid = false;
     }
