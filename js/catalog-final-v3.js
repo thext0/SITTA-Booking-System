@@ -1,7 +1,10 @@
 /**
- * SITTA - Catalog Module - FINAL VERSION v3.1
- * Product listing, search, filter, dan detail dengan qty selector
- * Fixes: Better layout (2 rows), button tidak terpotong, 100ms reset
+ * SITTA - Catalog Module - FINAL VERSION v3.0
+ * Improvements:
+ * - SUPER FAST reset: 100ms (was 250ms, now 95% faster than original 1800ms)
+ * - Quantity selector in catalog with +/- buttons
+ * - User can select qty before adding to cart
+ * - Better UX for multiple items
  */
 
 let currentFilters = {
@@ -28,7 +31,7 @@ function initializeCatalog() {
 }
 
 // ============================================
-// Render Products WITH QUANTITY SELECTOR (2-ROW LAYOUT)
+// Render Products WITH QUANTITY SELECTOR
 // ============================================
 
 function renderProducts(products) {
@@ -50,28 +53,22 @@ function renderProducts(products) {
                 <h4>${product.name}</h4>
                 <p><strong>Fakultas:</strong> ${product.faculty}</p>
                 <p>${product.description}</p>
-                
-                <!-- UPDATED LAYOUT TWO ROWS -->
                 <div class="product-footer">
-                    <!-- Row 1: Price & Wishlist -->
-                    <div class="price-row">
-                        <span class="price">${formatPrice(product.price)}</span>
-                        <button onclick="toggleWishlist(${product.id})" class="wishlist-btn" title="Tambah ke Wishlist">
-                            ${isInWishlist(product.id) ? '❤️' : '🤍'}
-                        </button>
+                    <span class="price">${formatPrice(product.price)}</span>
+                    
+                    <!-- Quantity Selector -->
+                    <div class="qty-selector">
+                        <button onclick="decreaseQty(${product.id})" class="qty-btn">−</button>
+                        <input type="number" id="qty-${product.id}" value="1" min="1" max="${product.stock}" class="qty-input" readonly>
+                        <button onclick="increaseQty(${product.id})" class="qty-btn">+</button>
                     </div>
                     
-                    <!-- Row 2: Qty Selector & Add Button -->
-                    <div class="action-row">
-                        <div class="qty-selector">
-                            <button onclick="decreaseQty(${product.id})" class="qty-btn">−</button>
-                            <input type="number" id="qty-${product.id}" value="1" min="1" max="${product.stock}" class="qty-input" readonly>
-                            <button onclick="increaseQty(${product.id})" class="qty-btn">+</button>
-                        </div>
-                        <button onclick="addProductToCart(${product.id})" class="btn btn-primary add-cart-btn">
-                            🛒 Tambah
-                        </button>
-                    </div>
+                    <button onclick="addProductToCart(${product.id})" class="btn btn-primary add-cart-btn">
+                        🛒 Tambah
+                    </button>
+                    <button onclick="toggleWishlist(${product.id})" class="wishlist-btn" title="Tambah ke Wishlist">
+                        ${isInWishlist(product.id) ? '❤️' : '🤍'}
+                    </button>
                 </div>
             </div>
         </article>
@@ -102,7 +99,7 @@ function decreaseQty(productId) {
 }
 
 // ============================================
-// Cart Operations
+// Cart Operations - SUPER FAST (100ms)
 // ============================================
 
 function addProductToCart(productId) {
@@ -127,13 +124,12 @@ function addProductToCart(productId) {
     button.style.background = '#10b981';
     button.disabled = true;
     
-    // Update the showNotification function call in addProductToCart:
-    showNotification(`✅ ${product.name} (${quantity}x) berhasil ditambahkan!`, 'success', 1500);
+    showNotification(`${product.name} (${quantity}x) ditambahkan`, 'success');
     
     // Reset qty to 1
     qtyInput.value = 1;
     
-    // reset:
+    // SUPER FAST reset: 100ms only!
     setTimeout(() => {
         button.innerHTML = '🛒 Tambah';
         button.style.background = '';
@@ -220,12 +216,10 @@ function setupEventListeners() {
 function toggleWishlist(productId) {
     if (isInWishlist(productId)) {
         removeFromWishlist(productId);
-        // Update the showNotification function calls in toggleWishlist:
-        showNotification('✅ Berhasil dihapus dari wishlist!', 'success', 1500);
+        showNotification('Dihapus dari wishlist', 'success');
     } else {
         addToWishlist(productId);
-        // Update the showNotification function calls in toggleWishlist:
-        showNotification('✅ Berhasil ditambahkan ke wishlist!', 'success', 1500);
+        showNotification('Ditambahkan ke wishlist', 'success');
     }
     
     // Refresh to show heart update

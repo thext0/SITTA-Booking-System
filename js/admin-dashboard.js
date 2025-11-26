@@ -5,36 +5,35 @@
 document.addEventListener('DOMContentLoaded', () => {
     const admin = checkAuth('admin');
     if (admin) {
-        initializeDashboard(admin);
+        initializeDashboard();
     }
 });
 
-function initializeDashboard(admin) {
-    document.getElementById('admin-name').textContent = admin.name + ' (Admin)';
-    updateStatistics();
-    renderRecentOrders();
-}
+function initializeDashboard() {
+    const admin = getCurrentUser();
+    if (!admin) return;
 
-function updateStatistics() {
+    document.getElementById('admin-name').textContent = admin.name;
+
     const orders = getOrders();
     const products = getProducts();
 
-    const totalOrders = orders.length;
-    const pendingOrders = orders.filter(o => o.status === 'Menunggu Konfirmasi').length;
-    const processingOrders = orders.filter(o => o.status === 'Sedang Diproses').length;
-
-    document.getElementById('total-orders').textContent = totalOrders;
-    document.getElementById('pending-orders').textContent = pendingOrders;
-    document.getElementById('processing-orders').textContent = processingOrders;
+    // Populate stats
+    document.getElementById('total-orders').textContent = orders.length;
+    document.getElementById('pending-orders').textContent = orders.filter(o => o.status === 'Menunggu Konfirmasi').length;
+    document.getElementById('processing-orders').textContent = orders.filter(o => o.status === 'Sedang Diproses').length;
     document.getElementById('total-products').textContent = products.length;
+
+    // Render recent orders
+    renderRecentOrders(orders.slice(0, 5));
 }
 
-function renderRecentOrders() {
-    const orders = getOrders().sort((a, b) => 
-        new Date(b.createdAt) - new Date(a.createdAt)
-    ).slice(0, 5);
-
+function renderRecentOrders(orders) {
     const tbody = document.getElementById('recent-orders-list');
+    if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6">Tidak ada pesanan terbaru</td></tr>';
+        return;
+    }
 
     tbody.innerHTML = orders.map(order => `
         <tr>
@@ -43,11 +42,7 @@ function renderRecentOrders() {
             <td>${formatDate(order.createdAt)}</td>
             <td>${formatPrice(order.total)}</td>
             <td><span class="status-badge status-${order.status.toLowerCase().replace(' ', '-')}">${order.status}</span></td>
-            <td>
-                <button onclick="viewOrder(${order.id})" class="btn btn-primary" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
-                    Lihat
-                </button>
-            </td>
+            <td><a href="admin-orders.html?orderId=${order.id}" class="btn btn-sm btn-primary">Detail</a></td>
         </tr>
     `).join('');
 }

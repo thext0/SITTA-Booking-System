@@ -42,6 +42,7 @@ function renderOrdersList(orders) {
                             <option value="Sedang Diproses">Diproses</option>
                             <option value="Siap Diambil">Siap</option>
                             <option value="Selesai">Selesai</option>
+                            <option value="Dibatalkan">Dibatalkan</option>
                         </select>
                     `}
                 </div>
@@ -129,23 +130,7 @@ function viewOrderDetail(orderId) {
             </div>
         </div>
 
-        ${order.status === 'Selesai' ? `
-            <div style="margin-bottom: 1rem;">
-                <button class="btn btn-secondary" style="width:100%;" disabled>Pesanan sudah selesai — status tidak dapat diubah</button>
-            </div>
-        ` : `
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
-                <button onclick="updateStatusFromModal('Sedang Diproses')" class="btn btn-primary" style="width: 100%;">
-                    Proses
-                </button>
-                <button onclick="updateStatusFromModal('Siap Diambil')" class="btn btn-primary" style="width: 100%;">
-                    Siap
-                </button>
-                <button onclick="updateStatusFromModal('Selesai')" class="btn btn-primary" style="width: 100%;">
-                    Selesai
-                </button>
-            </div>
-        `}
+        ${renderModalActionButtons(order)}
 
         <button onclick="closeOrderDetailModal()" class="btn btn-secondary" style="width: 100%;">
             Tutup
@@ -173,7 +158,7 @@ function updateStatusFromModal(newStatus) {
     if (selectedOrderId) {
         const order = getOrderById(selectedOrderId);
         if (order && order.status === 'Selesai') {
-            showNotification('Status pesanan sudah "Selesai" dan tidak dapat diubah.', 'error');
+            showNotification('Status pesanan sudah "Selesai".', 'error');
             return;
         }
 
@@ -190,6 +175,32 @@ function closeOrderDetailModal() {
         modal.classList.remove('active');
     }
     selectedOrderId = null;
+}
+
+function renderModalActionButtons(order) {
+    const { status } = order;
+    let buttons = '';
+
+    if (status === 'Menunggu Konfirmasi') {
+        buttons = `
+            <button onclick="updateStatusFromModal('Sedang Diproses')" class="btn btn-primary">Proses</button>
+            <button onclick="updateStatusFromModal('Dibatalkan')" class="btn btn-danger">Batalkan</button>
+        `;
+    } else if (status === 'Sedang Diproses') {
+        buttons = `
+            <button onclick="updateStatusFromModal('Siap Diambil')" class="btn btn-primary">Siap Diambil</button>
+            <button onclick="updateStatusFromModal('Dibatalkan')" class="btn btn-danger">Batalkan</button>
+        `;
+    } else if (status === 'Siap Diambil') {
+        buttons = `
+            <button onclick="updateStatusFromModal('Selesai')" class="btn btn-primary">Selesai</button>
+            <button onclick="updateStatusFromModal('Dibatalkan')" class="btn btn-danger">Batalkan</button>
+        `;
+    } else if (status === 'Selesai' || status === 'Dibatalkan') {
+        return `<div class="final-status-message">Status pesanan ini tidak dapat diubah.</div>`;
+    }
+
+    return `<div class="modal-actions">${buttons}</div>`;
 }
 
 // Close on overlay click

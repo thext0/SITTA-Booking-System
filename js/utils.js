@@ -8,38 +8,38 @@
 // ============================================
 
 function initializeSampleData() {
-    // Sample Users (demo accounts)
+    // Sample Users
     if (!localStorage.getItem('sitta_users')) {
         const users = [
             {
                 id: 1,
-                nim: '123456789',
-                name: 'Yuda Pratama',
-                email: 'yuda.pratama@mahasiswa.ut.ac.id',
-                password: 'user123',
-                role: 'user',
-                faculty: 'FKIP',
-                address: 'Jl. Dinoyo No.86, Tegalsari, Surabaya'
-            },
-            {
-                id: 2,
-                nim: '111222333',
-                name: 'Andi Adinata',
-                email: 'andi.adinata@mahasiswa.ut.ac.id',
-                password: 'user123',
-                role: 'user',
-                faculty: 'FST',
-                address: 'Jl. Dupak Masigit No.10, Surabaya'
-            },
-            {
-                id: 3,
                 nim: '000000001',
-                name: 'Budi',
+                name: 'Admin SITTA',
                 email: 'admin@ut.ac.id',
                 password: 'admin123',
                 role: 'admin',
                 faculty: null,
                 address: 'Universitas Terbuka'
+            },
+            {
+                id: 2,
+                nim: '987654321',
+                name: 'Andi Mahasiswa',
+                email: 'andi@mahasiswa.ut.ac.id',
+                password: 'user123',
+                role: 'user',
+                faculty: 'FKIP',
+                address: 'Jl. Cabe Raya, Tangerang Selatan, 15418'
+            },
+            {
+                id: 3,
+                nim: '111222333',
+                name: 'Yuda Mahasiswa',
+                email: 'yuda@mahasiswa.ut.ac.id',
+                password: 'user123',
+                role: 'user',
+                faculty: 'FST',
+                address: 'Jl. Pondok Cabe, Tangerang Selatan, 15418'
             }
         ];
         localStorage.setItem('sitta_users', JSON.stringify(users));
@@ -138,9 +138,9 @@ function getUsers() {
     return users ? JSON.parse(users) : [];
 }
 
-function findUserByEmail(email) {
+function findUserByEmailOrNim(emailOrNim) {
     const users = getUsers();
-    return users.find(u => u.email === email || u.nim === email);
+    return users.find(u => u.email === emailOrNim || u.nim === emailOrNim);
 }
 
 function findUserById(id) {

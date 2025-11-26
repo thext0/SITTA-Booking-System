@@ -60,7 +60,7 @@ function handleLogin(event) {
     if (!isValid) return;
 
     // Find user
-    const user = findUserByEmail(email);
+    const user = findUserByEmailOrNim(email);
 
     if (!user) {
         showNotification('Email atau NIM tidak terdaftar', 'error');
@@ -144,13 +144,10 @@ function handleRegister(event) {
     }
 
     // Check if email or nim already exists
-    if (findUserByEmail(email)) {
+    if (findUserByEmailOrNim(email)) {
         showError('reg-email', 'Email sudah terdaftar');
         isValid = false;
-    }
-
-    const users = getUsers();
-    if (users.some(u => u.nim === nim)) {
+    } else if (findUserByEmailOrNim(nim)) {
         showError('reg-nim', 'NIM sudah terdaftar');
         isValid = false;
     }
@@ -165,7 +162,7 @@ function handleRegister(event) {
         password,
         faculty,
         address,
-        role: 'user' // Default role adalah user (bukan admin)
+        role: 'user' // Default role adalah user
     };
 
     addUser(newUser);
@@ -217,4 +214,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (registerForm) {
         registerForm.addEventListener('submit', handleRegister);
     }
+
+    if (adminPages.includes(currentPage)) {
+        setupSidebarToggle();
+    }
 });
+
+function setupSidebarToggle() {
+    const sidebar = document.querySelector('.admin-sidebar');
+    const toggleBtn = document.querySelector('.sidebar-toggle');
+    const overlay = document.querySelector('.sidebar-overlay');
+
+    if (sidebar && toggleBtn && overlay) {
+        toggleBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('open');
+        });
+
+        overlay.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
+        });
+    }
+}
